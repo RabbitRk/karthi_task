@@ -53,7 +53,7 @@ class _MyStatefulWidgetState extends State<MyHomePage> {
                 });
               },
               child: Container(
-                color: Colors.yellow.shade600,
+                color: Colors.yellow,
                 padding: const EdgeInsets.all(8),
                 // Change button text when light changes state.
                 child: Text(on ? 'Blue' : 'Black'),
