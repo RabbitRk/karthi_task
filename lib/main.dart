@@ -1,37 +1,27 @@
 import 'package:flutter/material.dart';
-
-void main() => runApp(const MyApp());
-
-/// This is the main application widget.
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title:"Karthikeyan Task"),
-    );
-  }
+void main() {
+  runApp(const MaterialApp(
+    title: 'Navigation Basics',
+    home: MyHomePage(title: '',),
+  ));
 }
 
-/// This is the stateful widget that the main application instantiates.
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
   @override
-  State<MyHomePage> createState() => _MyStatefulWidgetState();
+  State<MyHomePage> createState() => Firstpage();
 }
 
 /// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MyHomePage> {
+class Firstpage extends State<MyHomePage> {
   bool on = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('First Page'),
+      ),
       body: Container(
         alignment: FractionalOffset.center,
         child: Column(
@@ -59,7 +49,37 @@ class _MyStatefulWidgetState extends State<MyHomePage> {
                 child: Text(on ? 'Blue' : 'Black'),
               ),
             ),
+
+            ElevatedButton(
+              child: const Text('Open page'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Secondpage()),
+                );
+              },
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class Secondpage extends StatelessWidget {
+  const Secondpage({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Second Page"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Go back!'),
         ),
       ),
     );
