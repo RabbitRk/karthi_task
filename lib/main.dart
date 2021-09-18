@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'drawer.dart';
 import 'secondpage.dart';
 import 'formvalid_page.dart';
 
@@ -15,7 +16,6 @@ class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => Firstpage();
 }
-
 /// This is the private State class that goes with MyStatefulWidget.
 class Firstpage extends State<MyHomePage> {
   bool on = false;
@@ -56,13 +56,14 @@ class Firstpage extends State<MyHomePage> {
             ElevatedButton(
               child: const Text('Open page'),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Secondpage()),
-                );
+                Navigator.of(context).push(_createRoute());
+                //navigator second page
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const Secondpage()),
+                // );
               },
             ),
-
             ElevatedButton(
               child: const Text('Form Valid'),
               onPressed: () {
@@ -72,9 +73,40 @@ class Firstpage extends State<MyHomePage> {
                 );
               },
             ),
+
+            ElevatedButton(
+              child: const Text('Drawer'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyApp()),
+                );
+              },
+            ),
+
           ],
         ),
       ),
+    );
+  }
+
+
+  // Animation Page
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const Secondpage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
     );
   }
 }
