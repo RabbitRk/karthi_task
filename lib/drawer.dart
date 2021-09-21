@@ -11,6 +11,8 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: appTitle,
       home: MyHomePage(title: appTitle),
+      debugShowCheckedModeBanner: false,
+
     );
   }
 }

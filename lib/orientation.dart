@@ -9,8 +9,11 @@ class orientation extends StatelessWidget {
     const appTitle = 'Orientation Demo';
 
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+
       title: appTitle,
       home: OrientationList(
+
         title: appTitle,
       ),
     );
