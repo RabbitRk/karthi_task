@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class screen extends StatefulWidget {
   const screen({Key? key}) : super(key: key);
 
@@ -9,7 +8,6 @@ class screen extends StatefulWidget {
 
 class _AnimatedContainerAppState extends State<screen> {
   get ItemCount => 3;
-
    int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
@@ -103,89 +101,100 @@ class _AnimatedContainerAppState extends State<screen> {
           ],
         ),
 
-
-
-          body: Container(
-            margin: EdgeInsets.all(10),
-            child: new Column(
+          body: SingleChildScrollView(
+            physics: ScrollPhysics(),
+            child: Column(
               children: <Widget>[
-                new Card(
-                  child: new Column(
-                    children: <Widget>[
+                Text('Listview builder'),
+                ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount:7,
+                    itemBuilder: (context,index){
+                      return Container(
+                            margin: EdgeInsets.all(10),
+                            child: new Column(
+                              children: <Widget>[
+                                new Card(
+                                  child: new Column(
+                                    children: <Widget>[
+                                      new Row(
+                                        children: <Widget>[
+                                          new Padding(
+                                            padding: new EdgeInsets.all(7.0),
+                                            child: new Text('Active',style: new TextStyle(fontSize: 18.0,color:Colors.green),),
+                                          ),
+                                          new Padding(
+                                            padding: new EdgeInsets.only(left: 127.0),
 
+                                            child: new Text('21 sep 2021,08:00 pm',style: new TextStyle(fontSize: 18.0)),
+                                          )
 
-                       new Row(
-                        children: <Widget>[
-                          new Padding(
-                            padding: new EdgeInsets.all(7.0),
-                            child: new Text('Active',style: new TextStyle(fontSize: 18.0,color:Colors.green),),
-                          ),
-                          new Padding(
-                            padding: new EdgeInsets.only(left: 127.0),
+                                        ],
+                                      ),
 
-                              child: new Text('21 sep 2021,08:00 pm',style: new TextStyle(fontSize: 18.0)),
-                          )
+                                      new Padding(
+                                          padding: new EdgeInsets.all(7.0),
+                                          child: new Row(
+                                            children: <Widget>[
+                                              new Text('General Electric',style: new TextStyle(fontSize: 18.0),),
+                                            ],
+                                          )
+                                      ),
 
-                        ],
-                      ),
-                      new Column(
-                        children: <Widget>[
-                          new Padding(
-                            padding: new EdgeInsets.all(10.0),
-                            child: new Text('General Electric'
-                                ,style: new TextStyle(fontSize: 18.0),),
-                          ),
-                          new Padding(
-                            padding: new EdgeInsets.all(10.0),
-                            child: new Text('Gaming chair,local pickup only'
-                                ,style: new TextStyle(fontSize: 18.0),),
-                          )
-                        ],
-                      ),
+                                      new Padding(
+                                          padding: new EdgeInsets.all(7.0),
+                                          child: new Row(
+                                            children: <Widget>[
+                                              new Text('Gaming chair,local pickup only'
+                                                ,style: new TextStyle(fontSize: 18.0),),
+                                            ],
+                                          )
+                                      ),
 
-                      new Column(
-                        children: <Widget>[
-                          new Padding(
-                            padding: new EdgeInsets.all(10.0),
-                            child: new Text('Esther Howerd',style: new TextStyle(fontSize: 18.0),),
-                          )
-                        ],
-                      ),
+                                      new Padding(
+                                          padding: new EdgeInsets.all(7.0),
+                                          child: new Row(
+                                            children: <Widget>[
+                                              new Text('Esther Howerd',style: new TextStyle(fontSize: 18.0),),
+                                            ],
+                                          )
+                                      ),
 
-                      new Padding(
-                          padding: new EdgeInsets.all(7.0),
-                          child: new Row(
-                            children: <Widget>[
+                                      new Padding(
+                                          padding: new EdgeInsets.all(7.0),
+                                          child: new Row(
+                                            children: <Widget>[
+                                              CircleAvatar(
+                                                backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+                                              ),
+                                              new Padding(
+                                                padding: new EdgeInsets.only(left: 180.0),
+                                                child: new Icon(Icons.thumb_up),
+                                              ),
 
-                              CircleAvatar(
-                                backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
-                              ),
-                              new Padding(
-                                padding: new EdgeInsets.only(left: 180.0),
-                                child: new Icon(Icons.thumb_up),
-                              ),
+                                              new Padding(
+                                                padding: new EdgeInsets.only(left: 20.0),
+                                                child: new Icon(Icons.comment),
+                                              ),
+                                              new Padding(
+                                                padding: new EdgeInsets.only(left: 20.0),
+                                                child: new Icon(Icons.share),
+                                              ),
+                                            ],
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                )
 
-                              new Padding(
-                                padding: new EdgeInsets.only(left: 20.0),
-                                child: new Icon(Icons.comment),
-                              ),
-                              new Padding(
-                                padding: new EdgeInsets.only(left: 20.0),
-                                child: new Icon(Icons.share),
-                              ),
-
-
-                            ],
-                          )
-                      )
-                    ],
-                  ),
-                )
-
+                              ],
+                            ),
+                          );
+                    })
               ],
             ),
           ),
-
 
 
           //Bottm navigation bar

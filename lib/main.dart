@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'secondpage.dart';
 import 'formvalid_page.dart';
+import 'futbuilder.dart';
 import 'screen.dart';
 
 void main() {
@@ -99,6 +100,17 @@ class Firstpage extends State<MyHomePage> {
                 );
               },
             ),
+
+            ElevatedButton(
+              child: const Text('Future Builder'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Fut_Builder()),
+                );
+              },
+            ),
+
 
           ],
         ),
