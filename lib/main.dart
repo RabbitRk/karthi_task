@@ -1,368 +1,353 @@
-import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:karthi_task/gallery.dart';
-import 'package:karthi_task/video_timer.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
-import 'package:thumbnails/thumbnails.dart';
+import 'package:karthi_task/qr_scanner/qr_scanner.dart';
+import 'Notification/notification.dart';
+import 'camera/camera_main.dart';
+import 'database/sql.dart';
+import 'drawer.dart';
+import 'secondpage.dart';
+import 'futbuilder.dart';
+import 'screen.dart';
+import 'formvalid_page.dart';
 
 void main() {
-  {
-    runApp(MyApp());
-  };
+  runApp(const MaterialApp(
+    title: 'Navigation Basics',
+    home: MyHomePage(title: '',),
+    debugShowCheckedModeBanner: false,
+  ));
+}
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  final String title;
+  @override
+  State<MyHomePage> createState() => Firstpage();
+}
+/// This is the private State class that goes with MyStatefulWidget.
+class Firstpage extends State<MyHomePage> {
+  bool on = false;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('First Page'),
+      ),
+      body: Container(
+        alignment: FractionalOffset.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.flag,
+                color: on ? Colors.blue : Colors.black,
+                size: 60,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  // Toggle light when tapped.
+                  on = !on;
+                });
+              },
+              child: Container(
+                color: Colors.yellow,
+                padding: const EdgeInsets.all(8),
+                // Change button text when light changes state.
+                child: Text(on ? 'Blue' : 'Black'),
+              ),
+            ),
+
+            ElevatedButton(
+              child: const Text('Open page'),
+              onPressed: () {
+                Navigator.of(context).push(_createRoute());
+                //navigator second page
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const Secondpage()),
+                // );
+              },
+            ),
+
+            ElevatedButton(
+              child: const Text('Form Valid'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Formvalid_page()),
+                );
+              },
+            ),
+
+
+
+            ElevatedButton(
+              child: const Text('screen'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const screen()),
+                );
+              },
+            ),
+
+
+
+            ElevatedButton(
+              child: const Text('Drawer'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyApp()),
+                );
+              },
+            ),
+
+            ElevatedButton(
+              child: const Text('Future Builder'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Fut_Builder()),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: const Text('qr scanner'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => qr()),
+                );
+              },
+            ),
+
+            ElevatedButton(
+              child: const Text('camera'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => camera()),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: const Text('sq lite'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => sql()),
+                );
+              },
+            ),
+
+            ElevatedButton(
+              child: const Text('notification'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => notification()),
+                );
+              },
+            ),
+
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  // Animation Page
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const Secondpage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
 }
 
-class MyApp extends StatelessWidget {
+/// This is the main application widget.
+class dates extends StatelessWidget {
+  const dates({Key? key}) : super(key: key);
+
+  static const String _title = 'Flutter Code Sample';
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      restorationScopeId: 'app',
+      title: _title,
+      home: MyStatefulWidget(restorationId: 'main'),
+    );
+  }
+}
+
+/// This is the stateful widget that the main application instantiates.
+class MyStatefulWidget extends StatefulWidget {
+  const MyStatefulWidget({Key? key, this.restorationId}) : super(key: key);
+
+  final String? restorationId;
+
+  @override
+  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+/// This is the private State class that goes with MyStatefulWidget.
+/// RestorationProperty objects can be used because of RestorationMixin.
+class _MyStatefulWidgetState extends State<MyStatefulWidget>
+    with RestorationMixin {
+  // In this example, the restoration ID for the mixin is passed in through
+  // the [StatefulWidget]'s constructor.
+  @override
+  String? get restorationId => widget.restorationId;
+
+  final RestorableDateTime _selectedDate =
+  RestorableDateTime(DateTime(2021, 9, 20));
+  late final RestorableRouteFuture<DateTime?> _restorableDatePickerRouteFuture =
+  RestorableRouteFuture<DateTime?>(
+    onComplete: _selectDate,
+    onPresent: (NavigatorState navigator, Object? arguments) {
+      return navigator.restorablePush(
+        _datePickerRoute,
+        arguments: _selectedDate.value.millisecondsSinceEpoch,
+      );
+    },
+  );
+
+  static Route<DateTime> _datePickerRoute(
+      BuildContext context,
+      Object? arguments,
+      ) {
+    return
+
+      DialogRoute<DateTime>(
+        context: context,
+        builder: (BuildContext context) {
+          return DatePickerDialog(
+            restorationId: 'date_picker_dialog',
+            initialEntryMode: DatePickerEntryMode.calendarOnly,
+            initialDate: DateTime.fromMillisecondsSinceEpoch(arguments! as int),
+            firstDate: DateTime(2021, 1, 1),
+            lastDate: DateTime(2022, 1, 1),
+          );
+        },
+      );
+  }
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_selectedDate, 'selected_date');
+    registerForRestoration(
+        _restorableDatePickerRouteFuture, 'date_picker_route_future');
+  }
+
+  void _selectDate(DateTime? newSelectedDate) {
+    if (newSelectedDate != null) {
+      setState(() {
+        _selectedDate.value = newSelectedDate;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              'Selected: ${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}'),
+        ));
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: OutlinedButton(
+          onPressed: () {
+            _restorableDatePickerRouteFuture.present();
+          },
+          child: const Text('Open Date Picker'),
+        ),
+      ),
+    );
+  }
+}
+
+
+/// This is the stateful widget that the main application instantiates.
+/// Flutter code sample for Checkbox
+
+// This example shows how you can override the default theme of
+// of a [Checkbox] with a [MaterialStateProperty].
+// In this example, the checkbox's color will be `Colors.blue` when the [Checkbox]
+// is being pressed, hovered, or focused. Otherwise, the checkbox's color will
+// be `Colors.red`.
+
+
+/// This is the main application widget.
+class check extends StatelessWidget {
+  const check({Key? key}) : super(key: key);
+
+  static const String _title = 'Flutter Code Sample';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Camera',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        brightness: Brightness.dark,
-        backgroundColor: Colors.black,
+      title: _title,
+      home: Scaffold(
+        appBar: AppBar(title: const Text(_title)),
+        body: const Center(
+          child: MyS(),
+        ),
       ),
-      home: CameraScreen(),
     );
   }
 }
 
-class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key key}) : super(key: key);
+/// This is the stateful widget that the main application instantiates.
+class MyS extends StatefulWidget {
+  const MyS({Key? key}) : super(key: key);
 
   @override
-  CameraScreenState createState() => CameraScreenState();
+  State<MyS> createState() => _MyStateful();
 }
 
-class CameraScreenState extends State<CameraScreen>
-    with AutomaticKeepAliveClientMixin {
-  CameraController _controller;
-  List<CameraDescription> _cameras;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _isRecordingMode = false;
-  bool _isRecording = false;
-  final _timerKey = GlobalKey<VideoTimerState>();
-
-  @override
-  void initState() {
-    _initCamera();
-    super.initState();
-  }
-
-  Future<void> _initCamera() async {
-    _cameras = await availableCameras();
-    _controller = CameraController(_cameras[0], ResolutionPreset.medium);
-    _controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
-  }
+/// This is the private State class that goes with MyStatefulWidget.
+class _MyStateful extends State<MyS> {
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    if (_controller != null) {
-      if (!_controller.value.isInitialized) {
-        return Container();
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Colors.blue;
       }
-    } else {
-      return const Center(
-        child: SizedBox(
-          width: 32,
-          height: 32,
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return Colors.red;
     }
 
-    if (!_controller.value.isInitialized) {
-      return Container();
-    }
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      key: _scaffoldKey,
-      extendBody: true,
-      body: Stack(
-        children: <Widget>[
-          _buildCameraPreview(),
-          Positioned(
-            top: 24.0,
-            left: 12.0,
-            child: IconButton(
-              icon: Icon(
-                Icons.switch_camera,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                _onCameraSwitch();
-              },
-            ),
-          ),
-          if (_isRecordingMode)
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 32.0,
-              child: VideoTimer(
-                key: _timerKey,
-              ),
-            )
-        ],
-      ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+    return Checkbox(
+      checkColor: Colors.white,
+      fillColor: MaterialStateProperty.resolveWith(getColor),
+      value: isChecked,
+      onChanged: (bool? value) {
+        setState(() {
+          isChecked = value!;
+        });
+      },
     );
   }
-
-  Widget _buildCameraPreview() {
-
-
-    Text("sdfdf");
-
-    final size = MediaQuery.of(context).size;
-    return ClipRect(
-      child: Container(
-
-
-        //get timestamp
-        //   Str date=DateTime.now().toUtc().toString();
-
-
-        child: Transform.scale(
-          scale: _controller.value.aspectRatio / size.aspectRatio,
-          child: Center(
-
-            child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: CameraPreview(_controller),
-
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return Container(
-
-      color: Theme.of(context).bottomAppBarColor,
-      height: 100.0,
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          FutureBuilder(
-            future: getLastImage(),
-            builder: (context, snapshot) {
-              if (snapshot.data == null) {
-                return Container(
-                  width: 40.0,
-                  height: 40.0,
-                  child:Text("No data"),
-                );
-              }
-              return GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Gallery(),
-                  ),
-                ),
-                child: Container(
-                  width: 40.0,
-                  height: 40.0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4.0),
-                    child: Image.file(
-                      snapshot.data,
-                      fit: BoxFit.cover,
-
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-          CircleAvatar(
-            backgroundColor: Colors.white,
-            radius: 28.0,
-            child: IconButton(
-              icon: Icon(
-                (_isRecordingMode)
-                    ? (_isRecording) ? Icons.stop : Icons.videocam
-                    : Icons.camera_alt,
-                size: 28.0,
-                color: (_isRecording) ? Colors.red : Colors.black,
-              ),
-              onPressed: () {
-                if (!_isRecordingMode) {
-                  _captureImage();
-                } else {
-                  if (_isRecording) {
-                    stopVideoRecording();
-                  } else {
-                    startVideoRecording();
-                  }
-                }
-              },
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              (_isRecordingMode) ? Icons.camera_alt : Icons.videocam,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              setState(() {
-                _isRecordingMode = !_isRecordingMode;
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<FileSystemEntity> getLastImage() async {
-    final Directory extDir = await getApplicationDocumentsDirectory();
-    final String dirPath = '${extDir.path}/media';
-    final myDir = Directory(dirPath);
-    List<FileSystemEntity> _images;
-    _images = myDir.listSync(recursive: true, followLinks: false);
-    _images.sort((a, b) {
-      return b.path.compareTo(a.path);
-    });
-    var lastFile = _images[0];
-    var extension = path.extension(lastFile.path);
-    if (extension == '.jpeg') {
-      return lastFile;
-    } else {
-      String thumb = await Thumbnails.getThumbnail(
-          videoFile: lastFile.path, imageType: ThumbFormat.PNG, quality: 30);
-      return File(thumb);
-    }
-  }
-
-  Future<void> _onCameraSwitch() async {
-    final CameraDescription cameraDescription =
-    (_controller.description == _cameras[0]) ? _cameras[1] : _cameras[0];
-    if (_controller != null) {
-      await _controller.dispose();
-    }
-    _controller = CameraController(cameraDescription, ResolutionPreset.medium);
-    _controller.addListener(() {
-      if (mounted) setState(() {});
-      if (_controller.value.hasError) {
-        showInSnackBar('Camera error ${_controller.value.errorDescription}');
-      }
-    });
-
-    try {
-      await _controller.initialize();
-    } on CameraException catch (e) {
-      _showCameraException(e);
-    }
-
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  void _captureImage() async {
-    print('_captureImage');
-    if (_controller.value.isInitialized) {
-      SystemSound.play(SystemSoundType.click);
-      final Directory extDir = await getApplicationDocumentsDirectory();
-      final String dirPath = '${extDir.path}/media';
-      await Directory(dirPath).create(recursive: true);
-      String _timestamp() => DateTime.now().toUtc().toString();
-
-
-
-      final String filePath = '$dirPath/${_timestamp()}.jpeg';
-      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(filePath)));
-
-      print('path: $filePath');
-      await _controller.takePicture(filePath);
-      setState(() {});
-    }
-  }
-
-  Future<String> startVideoRecording() async {
-    print('startVideoRecording');
-    if (!_controller.value.isInitialized) {
-      return null;
-    }
-    setState(() {
-      _isRecording = true;
-    });
-    _timerKey.currentState.startTimer();
-
-    final Directory extDir = await getApplicationDocumentsDirectory();
-    final String dirPath = '${extDir.path}/media';
-    await Directory(dirPath).create(recursive: true);
-    String _timestamp() => DateTime.now().toUtc().toString();
-
-    final String filePath = '$dirPath/${_timestamp()}.mp4';
-
-    if (_controller.value.isRecordingVideo) {
-      // A recording is already started, do nothing.
-      return null;
-    }
-
-    try {
-//      videoPath = filePath;
-      await _controller.startVideoRecording(filePath);
-    } on CameraException catch (e) {
-      _showCameraException(e);
-      return null;
-    }
-    return filePath;
-  }
-
-  Future<void> stopVideoRecording() async {
-    if (!_controller.value.isRecordingVideo) {
-      return null;
-    }
-    _timerKey.currentState.stopTimer();
-    setState(() {
-      _isRecording = false;
-    });
-
-    try {
-      await _controller.stopVideoRecording();
-    } on CameraException catch (e) {
-      _showCameraException(e);
-      return null;
-    }
-  }
-
-  DateTime currentPhoneDate = DateTime.now(); //DateTime
-
-
-
-  void _showCameraException(CameraException e) {
-    logError(e.code, e.description);
-    showInSnackBar('Error: ${e.code}\n${e.description}');
-  }
-
-  void showInSnackBar(String message) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  void logError(String code, String message) =>
-      print('Error: $code\nError Message: $message');
-
-  @override
-  bool get wantKeepAlive => true;
 }
