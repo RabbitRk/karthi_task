@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class VideoTimer extends StatefulWidget {
-  const VideoTimer({Key key}) : super(key: key);
+  const VideoTimer({Key? key}) : super(key: key);
   @override
   VideoTimerState createState() => VideoTimerState();
 }
 
 class VideoTimerState extends State<VideoTimer> {
-  Timer _timer;
+  late Timer _timer;
   int _start = 0;
 
   void startTimer() {

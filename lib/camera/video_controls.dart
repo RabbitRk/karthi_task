@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoControls extends StatefulWidget {
-  const VideoControls({this.videoController});
+  const VideoControls({required this.videoController});
 
   final VideoPlayerController videoController;
 
@@ -12,7 +12,7 @@ class VideoControls extends StatefulWidget {
 
 class _VideoControlsState extends State<VideoControls>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   @override
   void initState() {

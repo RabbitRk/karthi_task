@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageScreen extends StatefulWidget {
-  const ImageScreen({this.imagePath});
+  const ImageScreen({required this.imagePath});
 
   final String imagePath;
   @override

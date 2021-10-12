@@ -5,7 +5,7 @@ import 'video_controls.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPreview extends StatefulWidget {
-  const VideoPreview({this.videoPath});
+  const VideoPreview({required this.videoPath});
 
   final String videoPath;
   @override
@@ -14,8 +14,8 @@ class VideoPreview extends StatefulWidget {
 
 class _VideoPreviewState extends State<VideoPreview>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  VideoPlayerController _controller;
+  late AnimationController _animationController;
+  late VideoPlayerController _controller;
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _VideoPreviewState extends State<VideoPreview>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    if (_controller.value.initialized) {
+    if (_controller.value.isInitialized) {
       return Stack(
         children: <Widget>[
           ClipRect(

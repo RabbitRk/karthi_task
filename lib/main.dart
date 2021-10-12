@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:karthi_task/qr_scanner/qr_scanner.dart';
 import 'Notification/notification.dart';
 import 'camera/camera_main.dart';
+// import 'database/sql.dart';
+import 'camera/gallery.dart';
 import 'database/sql.dart';
 import 'drawer.dart';
 import 'secondpage.dart';
@@ -129,7 +131,7 @@ class Firstpage extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => camera()),
+                  MaterialPageRoute(builder: (context) => Gallery()),
                 );
               },
             ),

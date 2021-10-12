@@ -27,21 +27,21 @@ class StudentPage extends StatefulWidget {
 }
 
 class _StudentPageState extends State<StudentPage> {
-  String conn;
-  String conn1;
+  late String conn;
+  late String conn1;
 
   final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
-  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
-  Future<List<Student>> students;
-  String _studentName;
+  late Future<List<Student>> students;
+  late String _studentName;
   bool isUpdate = false;
-  int studentIdForUpdate;
-  DBHelper dbHelper;
+  late int studentIdForUpdate;
+  late DBHelper dbHelper;
   final _studentNameController = TextEditingController();
 
 
@@ -134,7 +134,7 @@ class _StudentPageState extends State<StudentPage> {
                     //   return null;
                     // },
                     onSaved: (value) {
-                      _studentName = value;
+                      _studentName = value!;
                     },
                     controller: _studentNameController,
                     decoration: InputDecoration(
@@ -169,10 +169,10 @@ class _StudentPageState extends State<StudentPage> {
                   if (isUpdate) {
                     _scaffoldKey.currentState?.showSnackBar(SnackBar(content: Text("Insert data successfully")));
 
-                    if (_formStateKey.currentState.validate()) {
+                    if (_formStateKey.currentState!.validate()) {
                       _scaffoldKey.currentState?.showSnackBar(SnackBar(content: Text("Insert data successfully")));
 
-                      _formStateKey.currentState.save();
+                      _formStateKey.currentState!.save();
                       dbHelper
                           .update(Student(studentIdForUpdate, _studentName))
                           .then((data) {
@@ -184,10 +184,13 @@ class _StudentPageState extends State<StudentPage> {
                       });
                     }
                   } else {
-                    if (_formStateKey.currentState.validate()) {
-                      _formStateKey.currentState.save();
+
+
+
+                    if (_formStateKey.currentState!.validate()) {
+                      _formStateKey.currentState!.save();
                       _scaffoldKey.currentState?.showSnackBar(SnackBar(content: Text("Insert data successfully")));
-                      dbHelper.add(Student(null, _studentName));
+                      dbHelper.add(Student(0, _studentName));
                     }
                   }
                   _studentNameController.text = '';
@@ -209,7 +212,7 @@ class _StudentPageState extends State<StudentPage> {
                   setState(() {
                     isUpdate = false; //
                     refreshStudentList();
-                    studentIdForUpdate = null;
+                    studentIdForUpdate = 0;
                   });
                 },
               ),
@@ -223,11 +226,11 @@ class _StudentPageState extends State<StudentPage> {
               future: students,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return generateList(snapshot.data);
+                  // return generateList("");
                 }
-                if (snapshot.data == null || snapshot.data.length == 0) {
-                  return Text('No Data Found');
-                }
+                // if (snapshot.data == null || snapshot.d == 0) {
+                //   return Text('No Data Found');
+                // }
                 return CircularProgressIndicator();
               },
             ),
@@ -280,10 +283,5 @@ class _StudentPageState extends State<StudentPage> {
         ),
       ),
     );
-  }
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(StringProperty('conn', conn));
   }
 }

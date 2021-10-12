@@ -6,8 +6,6 @@ import 'gallery.dart';
 import 'video_timer.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:thumbnails/thumbnails.dart';
-
 
 
 class camera extends StatelessWidget {
@@ -26,16 +24,15 @@ class camera extends StatelessWidget {
 }
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key key}) : super(key: key);
-
+  const CameraScreen({Key? key}) : super(key: key);
   @override
   CameraScreenState createState() => CameraScreenState();
 }
 
 class CameraScreenState extends State<CameraScreen>
     with AutomaticKeepAliveClientMixin {
-  CameraController _controller;
-  List<CameraDescription> _cameras;
+  late CameraController _controller;
+  late List<CameraDescription> _cameras;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isRecordingMode = false;
   bool _isRecording = false;
@@ -179,11 +176,8 @@ class CameraScreenState extends State<CameraScreen>
                   height: 40.0,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(4.0),
-                    child: Image.file(
-                      snapshot.data,
-                      fit: BoxFit.cover,
+                    child:Text("No data"),
 
-                    ),
                   ),
                 ),
               );
@@ -240,13 +234,14 @@ class CameraScreenState extends State<CameraScreen>
     });
     var lastFile = _images[0];
     var extension = path.extension(lastFile.path);
-    if (extension == '.jpeg') {
+    //if (extension == '.jpeg') {
       return lastFile;
-    } else {
-      String thumb = await Thumbnails.getThumbnail(
-          videoFile: lastFile.path, imageType: ThumbFormat.PNG, quality: 30);
-      return File(thumb);
-    }
+    //}
+    // else {
+    //   String thumb = await Thumbnails.getThumbnail(
+    //       videoFile: lastFile.path, imageType: ThumbFormat.PNG, quality: 30);
+    //   return File(thumb);
+    // }
   }
 
   Future<void> _onCameraSwitch() async {
@@ -286,23 +281,23 @@ class CameraScreenState extends State<CameraScreen>
 
 
       final String filePath = '$dirPath/${_timestamp()}.jpeg';
-      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(filePath)));
+      _scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(filePath)));
 
       print('path: $filePath');
-      await _controller.takePicture(filePath);
+      await _controller.takePicture();
       setState(() {});
     }
   }
 
   Future<String> startVideoRecording() async {
     print('startVideoRecording');
-    if (!_controller.value.isInitialized) {
-      return null;
-    }
+   // if (!_controller.value.isInitialized) {
+      //return null;
+    //}
     setState(() {
       _isRecording = true;
     });
-    _timerKey.currentState.startTimer();
+    _timerKey.currentState!.startTimer();
 
     final Directory extDir = await getApplicationDocumentsDirectory();
     final String dirPath = '${extDir.path}/media';
@@ -311,17 +306,17 @@ class CameraScreenState extends State<CameraScreen>
 
     final String filePath = '$dirPath/${_timestamp()}.mp4';
 
-    if (_controller.value.isRecordingVideo) {
-      // A recording is already started, do nothing.
-      return null;
-    }
+    // if (_controller.value.isRecordingVideo) {
+    //   // A recording is already started, do nothing.
+    //   return null;
+    // }
 
     try {
 //      videoPath = filePath;
-      await _controller.startVideoRecording(filePath);
+      await _controller.startVideoRecording();
     } on CameraException catch (e) {
       _showCameraException(e);
-      return null;
+     // return null;
     }
     return filePath;
   }
@@ -330,7 +325,7 @@ class CameraScreenState extends State<CameraScreen>
     if (!_controller.value.isRecordingVideo) {
       return null;
     }
-    _timerKey.currentState.stopTimer();
+    _timerKey.currentState!.stopTimer();
     setState(() {
       _isRecording = false;
     });
@@ -348,12 +343,12 @@ class CameraScreenState extends State<CameraScreen>
 
 
   void _showCameraException(CameraException e) {
-    logError(e.code, e.description);
+    logError(e.code, e.description??'');
     showInSnackBar('Error: ${e.code}\n${e.description}');
   }
 
   void showInSnackBar(String message) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
+    _scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(message)));
   }
 
   void logError(String code, String message) =>

@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'model.dart';
 
 class DBHelper {
-  static Database _db;
+  static Database _db=0 as Database;
   Future<Database> get db async {
     if (_db != null) {
       return _db;
@@ -39,7 +39,7 @@ class DBHelper {
     List<Student> students = [];
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {
-        students.add(Student.fromMap(maps[i]));
+        //students.add(Student.fromMap(maps![i]));
       }
     }
     return students;

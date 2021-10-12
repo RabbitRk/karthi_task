@@ -11,8 +11,8 @@ class Student {
     return map;
   }
 
-  Student.fromMap(Map<String, dynamic> map) {
-    id = map['id'];
-    name = map['name'];
-  }
+  // Student.fromMap(Map<String, dynamic> map) {
+  //   id = map['id'];
+  //   name = map['name'];
+  // }
 }
